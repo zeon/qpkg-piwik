@@ -1,0 +1,39 @@
+/**
+ * Piwik - Web Analytics
+ *
+ * @link http://piwik.org
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
+ * @version $Id: rank.js 2967 2010-08-20 15:12:43Z vipsoft $
+ */
+
+$(document).ready(function() {
+	function getRank()
+	{
+		piwikHelper.showAjaxLoading('ajaxLoadingSEO');
+		var ajaxRequest = 
+		{
+			type: 'GET',
+			url: 'index.php',
+			dataType: 'html',
+			error: piwikHelper.ajaxHandleError,		
+			success: function (response) {
+				piwikHelper.hideAjaxLoading('ajaxLoadingSEO');
+				$('#SeoRanks').html(response);
+			},
+			data: { 
+					module: 'SEO',
+					action :'getRank',
+					url: encodeURIComponent( $('#seoUrl').val() ), 
+					idSite: piwik.idSite
+				}
+		};
+		$.ajax( ajaxRequest );
+	}  
+	
+	// click on Rank button
+	$('#rankbutton').bind('click', function() {
+		getRank();
+		return false ;
+	});
+
+});
